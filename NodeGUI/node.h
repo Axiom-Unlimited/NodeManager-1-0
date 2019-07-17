@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+
 namespace Ui {
 class node;
 }
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::node *ui;
+
 };
 
 #endif // NODE_H
