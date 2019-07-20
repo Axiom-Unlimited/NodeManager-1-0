@@ -16,6 +16,8 @@ struct H264Packet
 class UDPReceiver
 {
 public:
+    UDPReceiver(){}
+
     UDPReceiver(const QHostAddress address,const unsigned short port);
 
     void setCallback(std::function<void(H264Packet)> usrCallback);

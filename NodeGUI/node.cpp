@@ -1,14 +1,14 @@
 #include "node.h"
 #include "ui_node.h"
 
-node::node(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::node)
+Node::Node(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::Node)
 {
     ui->setupUi(this);
 }
 
-node::~node()
+Node::~Node()
 {
     delete ui;
 }

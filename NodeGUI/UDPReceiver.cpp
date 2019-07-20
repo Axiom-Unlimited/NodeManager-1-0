@@ -1,4 +1,4 @@
-#include "udpreceiver.h"
+#include <UDPReceiver.h>
 #include <iostream>
 #include <QNetworkDatagram>
 #include <QByteArray>
@@ -29,7 +29,6 @@ bool UDPReceiver::run()
 
 void UDPReceiver::receiveData()
 {
-    //todo: recieve data and push to callback.
     while (this->socket.isValid())
     {
         H264Packet packet;
