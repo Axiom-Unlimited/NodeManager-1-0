@@ -5,34 +5,41 @@
 #include <QHostAddress>
 #include <QUdpSocket>
 #include <future>
+#include <QObject>
 
 
 struct H264Packet
 {
     unsigned long long timestamp;
-    std::unique_ptr<char[1024]> pData;
+    char pData[1016];
 };
 
-class UDPReceiver
+class UDPReceiver : public QObject
 {
+    Q_OBJECT
 public:
+
+    ~UDPReceiver(){}
     UDPReceiver(){}
 
-    UDPReceiver(const QHostAddress address,const unsigned short port);
+    UDPReceiver(std::string address,const unsigned short port);
 
-    void setCallback(std::function<void(H264Packet)> usrCallback);
+//    void setCallback(const std::function<void(std::shared_ptr<H264Packet>)> usrCallback);
 
     bool run();
+
 
 private:
     void receiveData();
 
 private:
-    QUdpSocket                                      socket;
-    QHostAddress                                    ipAddress;
-    int                                             port;
-    std::function<void(H264Packet)>   callback;
-    std::future<void>                               _futureTask;
+    std::unique_ptr<QUdpSocket>                         socket;
+    std::string                                         ipAddress;
+    qint16                                              port;
+//    std::function<void(std::shared_ptr<H264Packet>)>    callback;
+    std::future<void>                                   _futureTask;
+signals:
+    void dataReady(H264Packet packet);
 };
 
 #endif // UDPRECEIVER_H
