@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui multimedia multimediawidgets
+QT       += core gui multimedia multimediawidgets uitools
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,6 +28,7 @@ THIRD_PARTY_DIR = ../third_party
 # OPENCV settings <- may change depending on your system
 OPENCV_INCLUDE_DIR = "/usr/local/include/opencv4"
 OPENCV_LIB_DIR = "/usr/local/lib/"
+VIDEOCODEC = "/usr/lib/x86_64-linux-gnu"
 
 # NVIDIA CODEC SDK settings <- may change depeding on your system
 NV_CODEC_DIR = "/home/mfigueroa/Documents/NVidia Codec SDK/Video_Codec_SDK_9.0.20"
@@ -44,19 +45,20 @@ THIRD_PARTY_CUDA_KERNELS += \
                          $$THIRD_PARTY_DIR/Utils/BitDepth.cu \
                          $$THIRD_PARTY_DIR/Utils/Resize.cu
 
-CONFIG += c++11
+CONFIG += c++17
 
 SOURCES += \
+        UDPReceiver.cpp \
         main.cpp \
         mainwindow.cpp \
-        node.cpp \
-        udpreceiver.cpp
+        node.cpp\
+        $$THIRD_PARTY_DIR/NvDecoder.cpp
 
 HEADERS += \
+        UDPReceiver.h \
         mainwindow.h \
         node.h \
         $$THIRD_PARTY_DIR/NvDecoder.h \
-        udpreceiver.h
 
 FORMS += \
         mainwindow.ui \
@@ -69,11 +71,13 @@ CUDA_INCLUDE_PATH += $$CUDA_INSTALL_DIR/include \
 
 INCLUDEPATH += $$NV_CODEC_DIR/include \
                $$CUDA_INCLUDE_PATH \
-               $$OPENCV_INCLUDE_DIR
+               $$OPENCV_INCLUDE_DIR \
+               $$THIRD_PARTY_DIR
 
 # library directories
 QMAKE_LIBDIR += $$CUDA_INSTALL_DIR/lib64 \
-                $$OPENCV_LIB_DIR
+                $$OPENCV_LIB_DIR \
+                $$VIDEOCODEC
 
 
 # The following makes sure all path names (which often include spaces) are put between quotation marks
@@ -82,6 +86,7 @@ CUDA_INC += $$join(CUDA_INCLUDE_PATH,'" -I"','-I"','"')
 # Add the necessary libraries
 LIBS += -lcuda \
         -lcudart \
+        -lnvcuvid \
         -lopencv_highgui \
         -lopencv_core\
         -lopencv_imgproc \

@@ -10,8 +10,9 @@
 
 struct H264Packet
 {
-    unsigned long long timestamp;
-    char pData[1016];
+    quint64 timestamp;
+    quint64 datasize;
+    std::vector<unsigned char> pData;
 };
 
 class UDPReceiver : public QObject
@@ -24,20 +25,20 @@ public:
 
     UDPReceiver(std::string address,const unsigned short port);
 
-//    void setCallback(const std::function<void(std::shared_ptr<H264Packet>)> usrCallback);
-
     bool run();
 
+    bool isValid();
 
 private:
     void receiveData();
 
+    void processData(char* data, int dataLength, std::vector<unsigned char>& outdata);
+
 private:
-    std::unique_ptr<QUdpSocket>                         socket;
-    std::string                                         ipAddress;
-    qint16                                              port;
-//    std::function<void(std::shared_ptr<H264Packet>)>    callback;
-    std::future<void>                                   _futureTask;
+    std::unique_ptr<QUdpSocket>     socket;
+    std::string ipAddress;
+    qint16 port;
+    std::future<void> _futureTask;
 signals:
     void dataReady(H264Packet packet);
 };

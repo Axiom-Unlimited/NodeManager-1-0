@@ -29,7 +29,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_addNode_clicked()
 {
     auto id = ui->nodeContainer->layout()->children().length();
-    auto node = std::make_unique<Node>(id, "192.168.1.255", 65530, this);
+    auto node = std::make_unique<Node>(id, "192.168.1.255", 65500 + id, this);
     ui->nodeContainer->layout()->addWidget(node.get());
     this->nodes.push_back(std::move(node));
 }
